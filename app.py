@@ -132,14 +132,12 @@ def show_file(file_name):
     # check if file_name is a directory or a file
     if os.path.isdir(file_name):
         old_dir = os.getcwd()
-        #####################################################
 
         if check_for_error_on_dir_entry(file_name)[0]:
             return render_template('error.html', error=check_for_error_on_dir_entry(file_name)[1])
         else:
             os.chdir(file_name)
 
-        ######################################################
         error = check_for_errors_on_read()
         if error[0]:
             os.chdir(old_dir)
@@ -147,7 +145,6 @@ def show_file(file_name):
         else:
             pass
 
-        ######################################################
 
         return render_template('index.html', files=get_all_files(),
                                folders=get_all_folders(),
@@ -160,7 +157,7 @@ def show_file(file_name):
             return send_file(os.getcwd() + '/' + file_name,
                              mimetype='image/' + file_name.split('.')[-1])
         return render_template('file.html', file_name=file_name, file_content=open(file_name).read(
-        ))  # .replace('\n', '<br>'))
+        ))
 
 
 @app.route('/upper_directory')
