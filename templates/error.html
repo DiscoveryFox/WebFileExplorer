@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+    <h1>There was an Error processing your request...</h1>
+    <p>{{ error }}</p>
+    <button onclick="goback()">Go back to last Page</button>
+    <script>
+    goback = function () { window.location.href = '/'; };
+    </script>
+{% endblock %}

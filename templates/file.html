@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Explorer | {{ file_name }}</title>
+{% endblock %}
+
+{% block body %}
+    <button onclick="returntomain()">Back</button>
+    <label>
+        <textarea></textarea>
+    </label>
+    <!--suppress JSCheckFunctionSignatures -->
+    <script>
+    // register a function on load to load the file into the textarea
+    window.onload = function() {
+        const textarea = document.querySelector('textarea');
+        textarea.value = `{{ file_content | safe}}`;
+    };
+
+    document.addEventListener('keydown', e => {
+        if (e.ctrlKey && e.key === 's') {
+            // Prevent the Save dialog to open
+            e.preventDefault();
+            // Place your code here
+            const textarea = document.querySelector('textarea');
+            // get the content of the textarea
+            const content = textarea.value;
+            // send post request to save the content
+            console.log('save');
+            fetch('/save/' + '{{ file_name }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    content,
+                })
+            });
+            }
+        });
+
+    returntomain = function () {
+        const location = window.location.href.replace('http://', '').split('/')[0]
+        console.log(location)
+        window.location.href = 'http://' + location
+    }
+
+    </script>
+{% endblock %}

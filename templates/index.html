@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Explorer | {{ directoryname }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h1>{{ directorypath }}</h1>
+
+    <div class="grid-container">
+
+    <div class="card">
+        <a href="/upper_directory">
+            <div class="icon">
+                <i class="fa-solid fa-arrow-up fa-6x"></i>
+            </div>
+            <p style="margin-top: -32px">Upper Directory</p>
+        </a>
+    </div>
+
+    {% for folder in folders %}
+        <div class="card">
+            <a href="/{{ folder }}">
+                <div class="icon">
+                    <i class="fa-solid fa-folder fa-6x"></i>
+                </div>
+                <p>
+                    {% if len(folder) > 17 %}
+                        {{ folder[:14] }}...
+                    {% else %}
+                        {{ folder }}
+                    {% endif %}
+                </p>
+            </a>
+        </div>
+    {% endfor %}
+        {% for file in files %}
+            {% if file[1] == 'picture' %}
+                <div class="card">
+                    <a href="/{{ convert_to_safe(file[0]) }}">
+                        <div class="icon">
+                            <img src="/{{ convert_to_safe(file[0]) }}" alt="{{ file[0] }}" style="height: 80px; width: 80px">
+                        </div>
+                        <p>
+                            {% if len(file[0]) > 17 %}
+                                {{ file[0][:14] }}...
+                            {% else %}
+                                {{ file[0] }}
+                            {% endif %}
+                        </p>
+                    </a>
+                </div>
+            {% else %}
+            <div class="card">
+                <a href="/{{ convert_to_safe(file[0]) }}">
+                    <div class="icon">
+                        <i class="fa-solid fa-file fa-6x" style=""></i>
+                    </div>
+                    <p>
+                        {% if len(file[0]) > 17 %}
+                            {{ file[0][:14] }}...
+                        {% else %}
+                            {{ file[0] }}
+                        {% endif %}
+                    </p>
+                </a>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
