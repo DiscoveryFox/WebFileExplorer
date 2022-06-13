@@ -1,7 +1,7 @@
 import os
 import platform
 
-from flask import Flask, render_template, request, send_file, url_for
+from flask import Flask, render_template, request, send_file, url_for, redirect
 
 app = Flask(__name__)
 
@@ -145,13 +145,7 @@ def show_file(file_name):
         else:
             pass
 
-
-        return render_template('index.html', files=get_all_files(),
-                               folders=get_all_folders(),
-                               directoryname=get_directory_name(),
-                               directorypath=os.getcwd(),
-                               convert_from_safe=convert_from_safe,
-                               convert_to_safe=convert_to_safe)
+        return redirect('/')
     else:
         if is_picture(file_name):
             return send_file(os.getcwd() + '/' + file_name,
@@ -163,12 +157,7 @@ def show_file(file_name):
 @app.route('/upper_directory')
 def upper_directory():
     os.chdir('..')
-    return render_template('index.html', files=get_all_files(),
-                           folders=get_all_folders(),
-                           directoryname=get_directory_name(),
-                           directorypath=os.getcwd(),
-                           convert_from_safe=convert_from_safe,
-                           convert_to_safe=convert_to_safe)
+    return redirect('/')
 
 
 @app.route('/save/<string:file_name>/', methods=["POST"])
