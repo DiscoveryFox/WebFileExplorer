@@ -9,38 +9,38 @@
     <h1>{{ directorypath }}</h1>
 
     <div class="grid-container">
-
-    <div class="card">
-        <a href="/upper_directory">
-            <div class="icon">
-                <i class="fa-solid fa-arrow-up fa-6x"></i>
-            </div>
-            <p style="margin-top: -32px">Upper Directory</p>
-        </a>
-    </div>
-
-    {% for folder in folders %}
         <div class="card">
-            <a href="/{{ folder }}">
+            <a href="/upper_directory">
                 <div class="icon">
-                    <i class="fa-solid fa-folder fa-6x"></i>
+                    <i class="fa-solid fa-arrow-up fa-6x"></i>
                 </div>
-                <p>
-                    {% if len(folder) > 17 %}
-                        {{ folder[:14] }}...
-                    {% else %}
-                        {{ folder }}
-                    {% endif %}
-                </p>
+                <p style="margin-top: -32px">Upper Directory</p>
             </a>
         </div>
-    {% endfor %}
+
+        {% for folder in folders %}
+            <div class="card" id="{{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}">
+                <a href="/{{ folder }}">
+                    <div class="icon">
+                        <i class="fa-solid fa-folder fa-6x"></i>
+                    </div>
+                    <p>
+                        {% if len(folder) > 17 %}
+                            {{ folder[:14] }}...
+                        {% else %}
+                            {{ folder }}
+                        {% endif %}
+                    </p>
+                </a>
+            </div>
+        {% endfor %}
         {% for file in files %}
             {% if file[1] == 'picture' %}
-                <div class="card">
+                <div class="card" id="{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}">
                     <a href="/{{ convert_to_safe(file[0]) }}">
                         <div class="icon">
-                            <img src="/{{ convert_to_safe(file[0]) }}" alt="{{ file[0] }}" style="height: 80px; width: 80px">
+                            <img src="/{{ convert_to_safe(file[0]) }}" alt="{{ file[0] }}"
+                                 style="height: 80px; width: 80px">
                         </div>
                         <p>
                             {% if len(file[0]) > 17 %}
@@ -52,21 +52,124 @@
                     </a>
                 </div>
             {% else %}
-            <div class="card">
-                <a href="/{{ convert_to_safe(file[0]) }}">
-                    <div class="icon">
-                        <i class="fa-solid fa-file fa-6x" style=""></i>
-                    </div>
-                    <p>
-                        {% if len(file[0]) > 17 %}
-                            {{ file[0][:14] }}...
-                        {% else %}
-                            {{ file[0] }}
-                        {% endif %}
-                    </p>
-                </a>
-            </div>
+                <div class="card" id="{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}">
+                    <a href="/{{ convert_to_safe(file[0]) }}">
+                        <div class="icon">
+                            <i class="fa-solid fa-file fa-6x" style=""></i>
+                        </div>
+                        <p>
+                            {% if len(file[0]) > 17 %}
+                                {{ file[0][:14] }}...
+                            {% else %}
+                                {{ file[0] }}
+                            {% endif %}
+                        </p>
+                    </a>
+                </div>
             {% endif %}
         {% endfor %}
+    {% for folder in folders %}
+        <script>
+            var {{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }} = document.getElementById('{{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}');
+            if ({{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.addEventListener) {
+                {{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.addEventListener('contextmenu', function (e) {
+                    console.log('contextmenu on {{ folder }}');
+                    alert("You've tried to open context menu on {{ folder }}"); //here you draw your own menu
+                    e.preventDefault();
+                }, false);
+            } else {
+                {{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.attachEvent('oncontextmenu', function () {
+                    console.log('contextmenu on {{ folder }}');
+                    alert("You've tried to open context menu on {{ folder }}");
+                    window.event.returnValue = false;
+                });
+            }
+        </script>
+    {% endfor %}
+    {% for file in files %}
+        <div class="context-menu" id="{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu">
+            <div class="item" onclick="{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_del()">
+                Delete
+            </div>
+            <div class="item">
+                Copy
+            </div>
+            <div class="item">
+                Cut
+            </div>
+            <div class="item">
+                Rename
+            </div>
+            <div class="item">
+                Copy Path
+            </div>
+        </div>
+        <script>
+            items = JSON.parse(localStorage.getItem('ids'))
+            if (items === null) {
+                items = Array()
+            }
+            items.push("{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu")
+            localStorage.setItem('ids', JSON.stringify(items))
+
+            var {{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }} = document.getElementById('{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}');
+            if ({{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.addEventListener) {
+                {{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    JSON.parse(localStorage.getItem('ids')).forEach(id => {
+                    document.getElementById(id).classList.remove('visible')
+                })
+
+                    var contextMenu = document.getElementById("{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu")
+                    console.log('contextmenu on {{ file[0] }}');
+
+                    const { clientX: mouseX, clientY: mouseY} = e
+                    contextMenu.style.top = `${mouseY}px`
+                    contextMenu.style.left = `${mouseX}px`
+
+                    contextMenu.classList.add("visible")
+
+                }, false);
+            } else {
+                {{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.attachEvent('oncontextmenu', function () {
+                    window.event.returnValue = false;
+                    JSON.parse(localStorage.getItem('ids')).forEach(id => {
+                    document.getElementById(id).classList.remove('visible')
+                })
+
+                    var contextMenu = document.getElementById("{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu")
+                    const { clientx: mouseX, clienty: mouseY} = window.event;
+                    contextMenu.style.top = `${mouseY}px`
+                    contextMenu.style.left = `${mouseX}px`
+                    contextMenu.classList.add("visible")
+                });
+            }
+
+            var grid = document.querySelector('.grid-container');
+            var contextMenu = document.getElementById("{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu")
+            grid.addEventListener('click', (e) => {
+                console.log(e.target.offsetParent)
+                if (e.target.offsetParent !== contextMenu) {
+                    contextMenu.classList.remove('visible')
+                    console.log('visibility')
+                    console.log(contextMenu.classList)
+                }
+            })
+
+            function {{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_del() {
+                if (confirm("Are you sure you want to delete {{ file[0] }}?")) {
+                    window.location.href = "/delete/{{ file[0] }}";
+                }
+            }
+        </script>
+    {% endfor %}
+        <script>
+            document.addEventListener('click', (e) => {
+                JSON.parse(localStorage.getItem('ids')).forEach(id => {
+                    document.getElementById(id).classList.remove('visible')
+                })
+
+            })
+        </script>
     </div>
 {% endblock %}
