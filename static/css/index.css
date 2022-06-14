@@ -74,3 +74,7 @@ a {
 .context-menu.visible {
     display: block;
 }
+
+.card:hover {
+    background: rgba(28, 124, 234, 0.28);
+}
