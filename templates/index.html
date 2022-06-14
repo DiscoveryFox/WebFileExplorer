@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
+    <!--suppress ALL -->
     <title>Explorer | {{ directoryname }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 {% endblock %}
@@ -17,6 +18,16 @@
                 <p style="margin-top: -32px">Upper Directory</p>
             </a>
         </div>
+        <script>
+            function clear_backgrounds() {
+                {% for folder in folders %}
+                    document.getElementById('{{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}').style.background = null;
+                    {% endfor %}
+                    {% for file in files %}
+                    document.getElementById('{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}').style.background = null;
+                    {% endfor %}
+            }
+        </script>
 
         {% for folder in folders %}
             <div class="card" id="{{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}">
@@ -68,105 +79,242 @@
                 </div>
             {% endif %}
         {% endfor %}
-    {% for folder in folders %}
-        <script>
-            var {{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }} = document.getElementById('{{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}');
-            if ({{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.addEventListener) {
-                {{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.addEventListener('contextmenu', function (e) {
-                    console.log('contextmenu on {{ folder }}');
-                    alert("You've tried to open context menu on {{ folder }}"); //here you draw your own menu
-                    e.preventDefault();
-                }, false);
-            } else {
-                {{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.attachEvent('oncontextmenu', function () {
-                    console.log('contextmenu on {{ folder }}');
-                    alert("You've tried to open context menu on {{ folder }}");
-                    window.event.returnValue = false;
-                });
-            }
-        </script>
-    {% endfor %}
-    {% for file in files %}
-        <div class="context-menu" id="{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu">
-            <div class="item" onclick="{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_del()">
-                Delete
+        {% for folder in folders %}
+            <script>
+                var {{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }} =
+                document.getElementById('{{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}');
+                if ({{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.
+                addEventListener
+                )
+                {
+                    {{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.
+                    addEventListener('contextmenu', function (e) {
+                        console.log('contextmenu on {{ folder }}');
+                        e.preventDefault();
+                    }, false);
+                }
+                else
+                {
+                    {{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.
+                    attachEvent('oncontextmenu', function () {
+                        console.log('contextmenu on {{ folder }}');
+                        window.event.returnValue = false;
+                    });
+                }
+            </script>
+        {% endfor %}
+        {% for folder in folders %}
+            <div class="context-menu" id="{{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu">
+                <div class="item" onclick="{{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_del()">
+                    Delete
+                </div>
+                <div class="item">
+                    Copy
+                </div>
+                <div class="item">
+                    Cut
+                </div>
+                <div class="item">
+                    Rename
+                </div>
+                <div class="item">
+                    Copy Path
+                </div>
             </div>
-            <div class="item">
-                Copy
-            </div>
-            <div class="item">
-                Cut
-            </div>
-            <div class="item">
-                Rename
-            </div>
-            <div class="item">
-                Copy Path
-            </div>
-        </div>
-        <script>
-            items = JSON.parse(localStorage.getItem('ids'))
-            if (items === null) {
-                items = Array()
-            }
-            items.push("{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu")
-            localStorage.setItem('ids', JSON.stringify(items))
+            <script>
+                items = JSON.parse(localStorage.getItem('ids_file'))
+                if (items === null) {
+                    items = Array()
+                }
+                items.push("{{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu")
+                localStorage.setItem('ids_file', JSON.stringify(items))
 
-            var {{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }} = document.getElementById('{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}');
-            if ({{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.addEventListener) {
-                {{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.addEventListener('contextmenu', (e) => {
-                    e.preventDefault();
-                    JSON.parse(localStorage.getItem('ids')).forEach(id => {
-                    document.getElementById(id).classList.remove('visible')
+                var {{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }} =
+                document.getElementById('{{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}');
+                if ({{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.
+                addEventListener
+                )
+                {
+                    {{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.
+                    addEventListener('contextmenu', (e) => {
+                        e.preventDefault();
+                        clear_backgrounds();
+                        var items = JSON.parse(localStorage.getItem('ids_file'))
+                        if (items === null) {
+                            items = Array()
+                        }
+                        items.forEach(id => {
+                            if (document.getElementById(id) !== null) {
+                                document.getElementById(id).classList.remove('visible')
+                            }
+                        })
+
+                        var card = document.getElementById('{{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}')
+                        card.style.background = 'rgba(28,124,234,0.75)'
+
+                        var contextMenu = document.getElementById("{{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu")
+                        console.log('contextmenu on {{ folder }}');
+
+                        const {clientX: mouseX, clientY: mouseY} = e
+                        contextMenu.style.top = `${mouseY}px`
+                        contextMenu.style.left = `${mouseX}px`
+
+                        contextMenu.classList.add("visible")
+
+                    }, false);
+                }
+                else
+                {
+                    {{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.
+                    attachEvent('oncontextmenu', function () {
+                        window.event.returnValue = false;
+                        clear_backgrounds()
+                        var items = JSON.parse(localStorage.getItem('ids_file'));
+                        if (items === null) {
+                            items = Array()
+                        }
+                        items.forEach(id => {
+                            if (document.getElementById(id) !== null) {
+                                document.getElementById(id).classList.remove('visible')
+                            }
+                        })
+
+                        var contextMenu = document.getElementById("{{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu")
+                        const {clientx: mouseX, clienty: mouseY} = window.event;
+                        contextMenu.style.top = `${mouseY}px`
+                        contextMenu.style.left = `${mouseX}px`
+                        contextMenu.classList.add("visible")
+                    });
+                }
+
+                var grid = document.querySelector('.grid-container');
+                var contextMenu = document.getElementById("{{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu")
+                grid.addEventListener('click', (e) => {
+                    console.log(e.target.offsetParent)
+                    if (e.target.offsetParent !== contextMenu) {
+                        contextMenu.classList.remove('visible')
+                        console.log('visibility')
+                        console.log(contextMenu.classList)
+                    }
                 })
 
-                    var contextMenu = document.getElementById("{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu")
-                    console.log('contextmenu on {{ file[0] }}');
+                function {{ folder.replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_del() {
+                    if (confirm("Are you sure you want to delete {{ folder }}?")) {
+                        window.location.href = "/delete/{{ convert_to_safe(folder) }}";
+                    }
+                }
+            </script>
+        {% endfor %}
 
-                    const { clientX: mouseX, clientY: mouseY} = e
-                    contextMenu.style.top = `${mouseY}px`
-                    contextMenu.style.left = `${mouseX}px`
+        {% for file in files %}
+            <div class="context-menu"
+                 id="{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu">
+                <div class="item" onclick="{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_del()">
+                    Delete
+                </div>
+                <div class="item">
+                    Copy
+                </div>
+                <div class="item">
+                    Cut
+                </div>
+                <div class="item">
+                    Rename
+                </div>
+                <div class="item">
+                    Copy Path
+                </div>
+            </div>
+            <script>
+                items = JSON.parse(localStorage.getItem('ids_file'))
+                if (items === null) {
+                    items = Array()
+                }
+                items.push("{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu")
+                localStorage.setItem('ids_file', JSON.stringify(items))
 
-                    contextMenu.classList.add("visible")
+                var {{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }} =
+                document.getElementById('{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}');
+                if ({{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.
+                addEventListener
+                )
+                {
+                    {{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.
+                    addEventListener('contextmenu', (e) => {
+                        e.preventDefault();
+                        clear_backgrounds()
+                        var items = JSON.parse(localStorage.getItem('ids_file'))
+                        if (items === null) {
+                            items = Array()
+                        }
+                        items.forEach(id => {
+                            if (document.getElementById(id) !== null) {
+                                document.getElementById(id).classList.remove('visible')
+                            }
+                        })
 
-                }, false);
-            } else {
-                {{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.attachEvent('oncontextmenu', function () {
-                    window.event.returnValue = false;
-                    JSON.parse(localStorage.getItem('ids')).forEach(id => {
-                    document.getElementById(id).classList.remove('visible')
+                        var contextMenu = document.getElementById("{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu")
+                        console.log('contextmenu on {{ file[0] }}');
+
+                        var card = document.getElementById('{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}')
+                        card.style.background = 'rgba(28,124,234,0.75)'
+
+                        const {clientX: mouseX, clientY: mouseY} = e
+                        contextMenu.style.top = `${mouseY}px`
+                        contextMenu.style.left = `${mouseX}px`
+
+                        contextMenu.classList.add("visible")
+
+                    }, false);
+                }
+                else
+                {
+                    {{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}.
+                    attachEvent('oncontextmenu', function () {
+                        window.event.returnValue = false;
+                        clear_backgrounds()
+                        var items = JSON.parse(localStorage.getItem('ids_file'));
+                        if (items === null) {
+                            items = Array()
+                        }
+                        items.forEach(id => {
+                            if (document.getElementById(id) !== null) {
+                                document.getElementById(id).classList.remove('visible')
+                            }
+                        })
+
+                        var contextMenu = document.getElementById("{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu")
+                        const {clientx: mouseX, clienty: mouseY} = window.event;
+                        contextMenu.style.top = `${mouseY}px`
+                        contextMenu.style.left = `${mouseX}px`
+                        contextMenu.classList.add("visible")
+                    });
+                }
+
+                var grid = document.querySelector('.grid-container');
+                var contextMenu = document.getElementById("{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu")
+                grid.addEventListener('click', (e) => {
+                    console.log(e.target.offsetParent)
+                    if (e.target.offsetParent !== contextMenu) {
+                        contextMenu.classList.remove('visible')
+                        console.log('visibility')
+                        console.log(contextMenu.classList)
+                        clear_backgrounds()
+                    }
                 })
 
-                    var contextMenu = document.getElementById("{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu")
-                    const { clientx: mouseX, clienty: mouseY} = window.event;
-                    contextMenu.style.top = `${mouseY}px`
-                    contextMenu.style.left = `${mouseX}px`
-                    contextMenu.classList.add("visible")
-                });
-            }
-
-            var grid = document.querySelector('.grid-container');
-            var contextMenu = document.getElementById("{{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_context_menu")
-            grid.addEventListener('click', (e) => {
-                console.log(e.target.offsetParent)
-                if (e.target.offsetParent !== contextMenu) {
-                    contextMenu.classList.remove('visible')
-                    console.log('visibility')
-                    console.log(contextMenu.classList)
+                function {{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_del() {
+                    if (confirm("Are you sure you want to delete {{ file[0] }}?")) {
+                        window.location.href = "/delete/{{ convert_to_safe(file[0]) }}";
+                    }
                 }
-            })
-
-            function {{ file[0].replace('.', 'CRYPTIC_DOT_DWAHNHKJDHNWAKJDNAWKJ_') }}_del() {
-                if (confirm("Are you sure you want to delete {{ file[0] }}?")) {
-                    window.location.href = "/delete/{{ file[0] }}";
-                }
-            }
-        </script>
-    {% endfor %}
+            </script>
+        {% endfor %}
         <script>
             document.addEventListener('click', (e) => {
-                JSON.parse(localStorage.getItem('ids')).forEach(id => {
+                JSON.parse(localStorage.getItem('ids_file')).forEach(id => {
                     document.getElementById(id).classList.remove('visible')
+                    clear_backgrounds()
                 })
 
             })
