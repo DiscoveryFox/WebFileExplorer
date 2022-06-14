@@ -167,5 +167,20 @@ def save_file(file_name):
         return 'saved', 200
 
 
+@app.route('/delete/<string:file_name>')
+def delete_file(file_name):
+    file_name = convert_from_safe(file_name)
+    try:
+        if os.path.isdir(os.getcwd() + '/' + file_name):
+            pass
+            # is directory
+        else:
+            os.remove(file_name)
+            # is file
+    except PermissionError:
+        # permissionerror
+        return render_template('error.html', error='PermissionError on delete.')
+
+
 if __name__ == '__main__':
     app.run()
