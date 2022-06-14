@@ -2,8 +2,11 @@ import os
 import platform
 
 from flask import Flask, render_template, request, send_file, url_for, redirect
+import temp_manager
 
 app = Flask(__name__)
+
+manager = temp_manager.TempManager()
 
 __starting_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -171,15 +174,23 @@ def save_file(file_name):
 def delete_file(file_name):
     file_name = convert_from_safe(file_name)
     try:
-        if os.path.isdir(os.getcwd() + '/' + file_name):
-            pass
-            # is directory
-        else:
-            os.remove(file_name)
-            # is file
+        manager.save_to_tmpdir(file_name)
+        return redirect('/')
     except PermissionError:
-        # permissionerror
         return render_template('error.html', error='PermissionError on delete.')
+
+
+@app.route('/restore/<string:file_name>')
+def restore_file(file_name):
+    file_name = convert_from_safe(file_name)
+    try:
+        print('restore: ' + file_name)
+        print(manager.restore_from_tmpdir(file_name))
+        return redirect('/')
+    except PermissionError:
+        return render_template('error.html', error='PermissionError on restore.')
+    except FileNotFoundError:
+        return render_template('error.html', error='FileNotFoundError on restore.')
 
 
 if __name__ == '__main__':
